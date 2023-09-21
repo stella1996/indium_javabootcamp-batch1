@@ -6,31 +6,31 @@ public class AccountServiceImpl implements AccountService {
 	private Account[] accounts = new Account[10];
 
 	@Override
-	public boolean create(Account acc) {
+	public boolean createAccount(Account acc) {
 
 		for (int i = 0; i < accounts.length; i++) {
 			if (accounts[i] == null) {
 				acc.setId(i + 1);
 				accounts[i] = acc;
-				break;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override
-	public boolean update(Account account) {
+	public boolean updateAccount(Account account) {
 		for (int i = 0; i < accounts.length; i++) {
 			if (accounts[i].getId() == account.getId()) {
 				accounts[i] = account;
-				break;
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	@Override
-	public boolean delete(int accountId) {
+	public boolean deleteAccount(int accountId) {
 		int index = 0;
 		for (int i = 0; i < accounts.length; i++) {
 			if (accounts[i].getId() == accountId) {
@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public Account get(int accountId) {
+	public Account getAccount(int accountId) {
 		Account account = null;
 		for (int i = 0; i < accounts.length; i++) {
 			if (accounts[i].getId() == accountId) {
@@ -58,12 +58,13 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public void getAll() {
+	public Account[] getAll() {
 		for (int i = 0; i < accounts.length; i++) {
 			if (accounts[i] != null) {
 				System.out.println(accounts[i].toString());
 			}
 		}
+		return accounts;
 	}
 
 }

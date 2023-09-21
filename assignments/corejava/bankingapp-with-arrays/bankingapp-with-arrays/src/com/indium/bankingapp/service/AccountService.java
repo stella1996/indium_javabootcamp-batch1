@@ -4,14 +4,14 @@ import com.indium.bankingapp.model.Account;
 
 public interface AccountService {
 
-	public boolean create(Account acc);
+	public boolean createAccount(Account acc);
 
-	public boolean update(Account acc);
+	public boolean updateAccount(Account acc);
 
-	public boolean delete(int accountId);
+	public boolean deleteAccount(int accountId);
 
-	public Account get(int accountId);
+	public Account getAccount(int accountId);
 
-	public void getAll();
+	public Account[] getAll();
 
 }

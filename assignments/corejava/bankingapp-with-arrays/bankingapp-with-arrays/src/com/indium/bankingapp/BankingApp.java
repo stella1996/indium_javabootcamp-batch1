@@ -65,20 +65,20 @@ public class BankingApp {
 	private static void deleteAccount() {
 		System.out.print("Enter the Account Id to be deleted: ");
 		int id = in.nextInt();
-		accountService.delete(id);
+		accountService.deleteAccount(id);
 	}
 
 	private static void updateAccount() {
 		System.out.print("Enter the Account Id to be updated: ");
 		int id = in.nextInt();
-		Account acc = accountService.get(id);
+		Account acc = accountService.getAccount(id);
 		captureAccountDetail(acc);
-		accountService.update(acc);
+		accountService.updateAccount(acc);
 	}
 
 	private static Account viewAccount(int accountid) {
 
-		return accountService.get(accountid);
+		return accountService.getAccount(accountid);
 	}
 
 	private static void viewAllAccounts() {
@@ -90,7 +90,7 @@ public class BankingApp {
 
 		captureAccountDetail(account);
 
-		accountService.create(account);
+		accountService.createAccount(account);
 
 	}
 
