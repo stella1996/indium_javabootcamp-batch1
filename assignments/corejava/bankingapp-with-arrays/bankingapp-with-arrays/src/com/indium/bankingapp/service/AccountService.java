@@ -1,4 +1,6 @@
+package com.indium.bankingapp.service;
 
+import com.indium.bankingapp.model.Account;
 
 public interface AccountService {
 
