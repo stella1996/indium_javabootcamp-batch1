@@ -1,3 +1,4 @@
+package com.indium.bankingapp.model;
 
 public class Account {
 
@@ -12,7 +13,6 @@ public class Account {
 	}
 
 	public Account(int id, String name, String type, Double balance, boolean active) {
-		super();
 		this.id = id;
 		this.name = name;
 		this.type = type;
