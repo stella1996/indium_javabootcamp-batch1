@@ -26,6 +26,6 @@ public interface AccountService {
 
 	public Map<String, Double> getAverageBalanceByAccountType();
 
-	public int getAccountDetailsByGivenName();
+	public Collection getAccountDetailsByGivenName();
 
 }

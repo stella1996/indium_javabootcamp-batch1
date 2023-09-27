@@ -3,7 +3,6 @@ package com.indium.bankingapp;
 import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Scanner;
 import com.indium.bankingapp.model.Account;
 import com.indium.bankingapp.service.AccountService;
@@ -28,6 +27,7 @@ public class BankingApp {
 			System.out.println("7. Exit");
 			System.out.print("Enter the option: ");
 
+			// Get option from user
 			int option = 0;
 			try {
 				option = Integer.parseInt(in.next());
@@ -84,17 +84,41 @@ public class BankingApp {
 
 	}
 
+	// Method helps to print statistics about accounts
 	private static void printStatistics() {
-		System.out.println("a] No of accounts which has balance more than 1 lac: "
-				+ accountService.getAccountsCountBalanceMorethanOneLakh(100000));
-		System.out.println("b] Show no of account by account type: " + accountService.getAccountsCountByAccountType());
-		System.out.println("c] Show no of accounts by account type with sorting: "
-				+ accountService.getAccountsCountByAccountTypeOrdered());
-		System.out.println("d] Show avg balance by account type: " + accountService.getAverageBalanceByAccountType());
-		System.out.println("e] List account ids whose account name contains given name: "
-				+ accountService.getAccountDetailsByGivenName());
+		System.out.println("a] No of accounts which has balance more than 1 lac");
+		System.out.println("b] Show no of account by account type");
+		System.out.println("c] Show no of accounts by account type with sorting");
+		System.out.println("d] Show avg balance by account type");
+		System.out.println("e] List account ids whose account name contains given name");
+		System.out.print("Enter an option: ");
+		String option;
+		option = in.next();
+		switch (option) {
+		case "a":
+			System.out.println("a] No of accounts which has balance more than 1 lac: "
+					+ accountService.getAccountsCountBalanceMorethanOneLakh(100000));
+			break;
+		case "b":
+			System.out.println(
+					"b] Show no of account by account type: " + accountService.getAccountsCountByAccountType());
+			break;
+		case "c":
+			System.out.println("c] Show no of accounts by account type with sorting: "
+					+ accountService.getAccountsCountByAccountTypeOrdered());
+			break;
+		case "d":
+			System.out
+					.println("d] Show avg balance by account type: " + accountService.getAverageBalanceByAccountType());
+			break;
+		case "e":
+			System.out.println("e] List account ids whose account name contains given name: "
+					+ accountService.getAccountDetailsByGivenName());
+			break;
+		}
 	}
 
+	// Method helps to delete account
 	private static void deleteAccount() {
 		try {
 			System.out.print("Enter the Account Id to be deleted: ");
@@ -105,26 +129,27 @@ public class BankingApp {
 		}
 	}
 
+	// Method helps to update account details
 	private static void updateAccount() {
 		System.out.print("Enter the Account Id to be updated: ");
 		int id = in.nextInt();
-		Account acc = null;
+		Account account = null;
 		try {
-			acc = accountService.getAccount(id);
-			captureAccountDetail(acc);
-			accountService.updateAccount(acc);
+			account = accountService.getAccount(id);
+			captureAccountDetail(account);
+			accountService.updateAccount(account);
 		} catch (NumberFormatException e) {
 			System.out.print("Your selection can only be an integer!");
 		}
 	}
 
+	// Method helps to view account details
 	private static Account viewAccount(int accountid) {
-
 		return accountService.getAccount(accountid);
 	}
 
+	// Method helps to view all accounts
 	private static void viewAllAccounts() {
-
 		Collection accounts = accountService.getAll();
 		printHeader();
 		Iterator<Account> iterator = accounts.iterator();
@@ -134,15 +159,14 @@ public class BankingApp {
 		}
 	}
 
+	// Method helps to create account
 	private static void addAccount() {
 		Account account = new Account();
-
 		captureAccountDetail(account);
-
 		accountService.createAccount(account);
-
 	}
 
+	// Method helps to capture new account information
 	private static void captureAccountDetail(Account account) {
 		System.out.print("Enter Account Name: ");
 		account.setName(in.next());
@@ -152,13 +176,15 @@ public class BankingApp {
 		account.setBalance(in.nextDouble());
 		System.out.print("Is Account Active(Enter true or false): ");
 		account.setActive(in.nextBoolean());
-
 	}
 
+	// Method helps to print the headers(Print the properities of accounts in table
+	// format)
 	private static void printHeader() {
 		System.out.format("\n%5s %15s %5s %15s %15s", "Id", "Name", "Type", "Balance", "Is Active");
 	}
 
+	// Method helps to print the account information
 	private static void printDetail(Account acc) {
 		if (acc == null) {
 			return;
