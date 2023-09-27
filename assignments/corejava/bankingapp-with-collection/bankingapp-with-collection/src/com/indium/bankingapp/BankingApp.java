@@ -38,6 +38,7 @@ public class BankingApp {
 			System.out.print("Enter the option: ");
 
 			int option = 0;
+			// Get option from user
 			option = Integer.parseInt(in.next());
 			switch (option) {
 
@@ -75,12 +76,14 @@ public class BankingApp {
 
 	}
 
+	// Method helps to delete account
 	private static void deleteAccount() {
 		System.out.print("Enter the Account Id to be deleted: ");
 		int id = in.nextInt();
 		accountService.deleteAccount(id);
 	}
 
+	// Method helps to update account details
 	private static void updateAccount() {
 		System.out.print("Enter the Account Id to be updated: ");
 		int id = in.nextInt();
@@ -89,11 +92,13 @@ public class BankingApp {
 		accountService.updateAccount(acc);
 	}
 
+	// Method helps to view account details
 	private static Account viewAccount(int accountid) {
 
 		return accountService.getAccount(accountid);
 	}
 
+	// Method helps to view all accounts
 	private static void viewAllAccounts() {
 
 		Collection accounts = accountService.getAll();
@@ -105,6 +110,7 @@ public class BankingApp {
 		}
 	}
 
+	// Method helps to create account
 	private static void addAccount() {
 		Account account = new Account();
 
@@ -114,6 +120,7 @@ public class BankingApp {
 
 	}
 
+	// Method helps to capture new account information
 	private static void captureAccountDetail(Account account) {
 		System.out.print("Enter Account Name: ");
 		account.setName(in.next());
@@ -126,17 +133,18 @@ public class BankingApp {
 
 	}
 
+	// Method helps to print the headers(Print the properities of accounts in table
+	// format)
 	private static void printHeader() {
 		System.out.format("\n%5s %15s %5s %15s %15s", "Id", "Name", "Type", "Balance", "Is Active");
 	}
 
+	// Method helps to print the account information
 	private static void printDetail(Account acc) {
 		if (acc == null) {
 			return;
 		}
-
 		System.out.format("\n%5s %15s %5s %12s %12s", acc.getId(), acc.getName(), acc.getType(), acc.getBalance(),
 				acc.isActive());
-
 	}
 }

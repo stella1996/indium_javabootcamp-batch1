@@ -9,12 +9,14 @@ import com.indium.bankingapp.model.Account;
 public class AccountServiceLinkedListImpl implements AccountService {
 	private LinkedList<Account> accounts = new LinkedList<>();
 
+	// Method helps to create new account in LinkedList
 	@Override
 	public boolean createAccount(Account account) {
 		account.setId(accounts.size() + 1);
 		return accounts.add(account);
 	}
 
+	// Method helps to update account in LinkedList
 	@Override
 	public boolean updateAccount(Account account) {
 		Account updateaccount = getAccount(account.getId());
@@ -24,12 +26,14 @@ public class AccountServiceLinkedListImpl implements AccountService {
 		return true;
 	}
 
+	// Method helps to delete account in LinkedList
 	@Override
 	public boolean deleteAccount(int accountId) {
 		Account account = getAccount(accountId);
 		return accounts.remove(account);
 	}
 
+	// Method helps to view account in LinkedList
 	@Override
 	public Account getAccount(int accountId) {
 		Account account = null;
@@ -42,6 +46,7 @@ public class AccountServiceLinkedListImpl implements AccountService {
 		return account;
 	}
 
+	// Method helps to print accounts
 	@Override
 	public Collection getAll() {
 		return accounts;
