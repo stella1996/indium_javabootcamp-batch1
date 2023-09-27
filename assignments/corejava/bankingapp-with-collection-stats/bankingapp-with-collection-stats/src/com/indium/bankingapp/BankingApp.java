@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Scanner;
+import com.indium.bankingapp.exception.AccountException;
 import com.indium.bankingapp.model.Account;
 import com.indium.bankingapp.service.AccountService;
 import com.indium.bankingapp.service.AccountServiceHashMapImpl;
@@ -51,7 +52,6 @@ public class BankingApp {
 					Account acc = null;
 					try {
 						acc = viewAccount(id);
-
 					} catch (InputMismatchException e) {
 						System.out.print(e.getMessage());
 					}
@@ -126,6 +126,8 @@ public class BankingApp {
 			accountService.deleteAccount(id);
 		} catch (NumberFormatException e) {
 			System.out.print("Your selection can only be an integer!");
+		} catch (AccountException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
@@ -140,12 +142,21 @@ public class BankingApp {
 			accountService.updateAccount(account);
 		} catch (NumberFormatException e) {
 			System.out.print("Your selection can only be an integer!");
+		} catch (AccountException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 
 	// Method helps to view account details
 	private static Account viewAccount(int accountid) {
-		return accountService.getAccount(accountid);
+		Account account = null;
+		try {
+			account = accountService.getAccount(accountid);
+			return account;
+		} catch (AccountException e) {
+			System.out.println(e.getMessage());
+		}
+		return account;
 	}
 
 	// Method helps to view all accounts

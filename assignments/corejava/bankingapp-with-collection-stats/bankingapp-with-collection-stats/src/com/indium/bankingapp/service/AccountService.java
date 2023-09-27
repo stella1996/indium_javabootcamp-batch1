@@ -3,7 +3,7 @@ package com.indium.bankingapp.service;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
+import com.indium.bankingapp.exception.AccountException;
 import com.indium.bankingapp.model.Account;
 
 public interface AccountService {
@@ -12,9 +12,9 @@ public interface AccountService {
 
 	public boolean updateAccount(Account acc);
 
-	public boolean deleteAccount(int accountId);
+	public boolean deleteAccount(int accountId) throws AccountException;
 
-	public Account getAccount(int accountId);
+	public Account getAccount(int accountId) throws AccountException;
 
 	public Collection getAll();
 

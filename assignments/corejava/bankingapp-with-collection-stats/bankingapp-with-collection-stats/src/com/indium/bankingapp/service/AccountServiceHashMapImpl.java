@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeMap;
+import com.indium.bankingapp.exception.AccountException;
 import com.indium.bankingapp.model.Account;
 
 public class AccountServiceHashMapImpl implements AccountService {
@@ -36,7 +37,7 @@ public class AccountServiceHashMapImpl implements AccountService {
 
 	// Method helps to get account details from Hashmap
 	@Override
-	public Account getAccount(int accountId) {
+	public Account getAccount(int accountId) throws AccountException {
 		Account account = accounts.get(accountId);
 		return account;
 	}
