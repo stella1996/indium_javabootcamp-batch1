@@ -1,0 +1,6 @@
+1,Stella,Savings,100000.0,true
+2,Steffy,Savings,200000.0,true
+3,Hadi,Savings,300000.0,true
+4,Juli,Current,400000.0,true
+5,Eliza,Current,500000.0,true
+6,Sam,Current,600000.0,true
