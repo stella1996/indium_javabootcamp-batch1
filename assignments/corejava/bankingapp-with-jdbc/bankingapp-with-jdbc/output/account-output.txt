@@ -1,0 +1,2 @@
+1,Stella,Savings,1200000.0,true
+2,Steffy,Current,200000.0,true
