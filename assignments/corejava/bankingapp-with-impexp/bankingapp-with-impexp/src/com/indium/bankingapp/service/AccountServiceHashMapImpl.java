@@ -144,6 +144,7 @@ public class AccountServiceHashMapImpl implements AccountService {
 		return result / balances.size();
 	}
 
+	// Method helps to export accounts to file
 	@Override
 	public void bulkExport() {
 		System.out.format("%n- Export started %n");
@@ -162,6 +163,7 @@ public class AccountServiceHashMapImpl implements AccountService {
 		}
 	}
 
+	// Method helps to import accounts from file
 	@Override
 	public void bulkImport() {
 		System.out.format("%n- Import started %n");
