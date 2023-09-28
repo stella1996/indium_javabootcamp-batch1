@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.util.stream.Collectors;
 import com.indium.skilltracker.exception.SkillsException;
 import com.indium.skilltrackerapp.model.*;
 import com.indium.skilltrackerapp.service.SkillsServiceImpl;
@@ -27,14 +27,14 @@ public class SkillTrackerAppMain {
 		while (true) {
 
 			System.out.println("\n");
-			System.out.println("1. Add Associate");
-			System.out.println("2. View Associate");
-			System.out.println("3. Update Associate");
-			System.out.println("4. Delete Associate");
+			System.out.println("1. Add an Associate");
+			System.out.println("2. View an Associate");
+			System.out.println("3. Update an Associate");
+			System.out.println("4. Delete an Associate");
 			System.out.println("5. Add Skills");
 			System.out.println("6. Edit Skill");
 			System.out.println("7. Delete Skill");
-			System.out.println("8. Search Associate");
+			System.out.println("8. Search an Associate");
 			System.out.println("9. Print Statistics");
 			System.out.println("10. View All Associates");
 			System.out.println("11. Exit");
@@ -55,9 +55,9 @@ public class SkillTrackerAppMain {
 					addAssociate();
 					break;
 				case 2:
-					System.out.print("Please enter associate id: ");
+					System.out.print("Enter associate id: ");
 					try {
-						associate = service.ViewAssociate(in.nextInt());
+						associate = service.viewAssociate(in.nextInt());
 						printHeader();
 						printDetail(associate);
 					} catch (SkillsException e) {
@@ -66,62 +66,65 @@ public class SkillTrackerAppMain {
 					}
 					break;
 				case 3:
-					System.out.print("Please enter associate id to update: ");
+					System.out.print("Enter associate id to update: ");
 					associate = new Associate();
 					associate.setId(in.nextInt());
 					Associate associateToUpdate = captureAssociateDetails(associate);
-					service.UpdateAssociateDetails(associateToUpdate);
-					System.out.println(associate.toString());
+					boolean updated = service.updateAssociateDetails(associateToUpdate);
+					if (updated) {
+						System.out.println("Associate has been updated successfully!");
+					} else {
+						System.out.println("Associate not updated properly");
+					}
 					break;
 				case 4:
-					System.out.print("Please enter associate id to delete: ");
-					service.DeleteAssociate(in.nextInt());
+					System.out.print("Enter associate id to delete: ");
+					service.deleteAssociate(in.nextInt());
 					System.out.println("Deleted Successfully");
 					break;
 				case 5:
-					System.out.println("Enter the associate id 	to add skill");
+					System.out.print("Enter the associate id to add skill: ");
 					int id = in.nextInt();
-					service.AddSkill(addSkills(), id);
+					service.addSkill(addSkills(), id);
 					System.out.println("Skill added successfully");
 					break;
 				case 6:
-					System.out.println("Enter the associate id 	to Edit skill");
+					System.out.print("Enter the associate id to Edit skill: ");
 					try {
 						int id1 = in.nextInt();
-						associate = service.ViewAssociate(id1);
-						System.out.println("Skills associated to the ID");
+						associate = service.viewAssociate(id1);
+						System.out.print("Skills associated to the ID");
 						printSkillHeader();
 						printSkillDetail(associate.getSkills());
-						System.out.println("\nEnter the skill id 	to Edit skill");
+						System.out.print("\nEnter the skill id 	to Edit skill: ");
 						int skillId = in.nextInt();
-						service.UpdateSkill(addSkills(), skillId);
+						service.updateSkill(addSkills(), skillId);
 						System.out.println("Skill updated successfully");
-
 					} catch (SkillsException e) {
 						e.printStackTrace();
 					}
 					break;
 				case 7:
-					System.out.print("Please enter associate id to delete a skill: ");
+					System.out.print("Enter associate id to delete a skill: ");
 					int id1 = in.nextInt();
-					associate = service.ViewAssociate(id1);
+					associate = service.viewAssociate(id1);
 					System.out.println("Skills associated to the ID");
 					printSkillHeader();
 					printSkillDetail(associate.getSkills());
-					System.out.println("\nEnter the skill id to delete");
+					System.out.print("\nEnter the skill id to delete: ");
 					int skillId = in.nextInt();
-					service.DeleteSkill(skillId);
+					service.deleteSkill(skillId);
 					System.out.println("Deleted Successfully");
 					break;
 				case 8:
-					SearchAssociate();
+					searchAssociate();
 					break;
 				case 9:
-					PrintStatistics();
+					printStatistics();
 					break;
 				case 10:
 					List<Associate> associateList = null;
-					associateList = service.ViewAllAssociate();
+					associateList = service.viewAllAssociate();
 					printHeader();
 					for (Associate ass : associateList) {
 						printDetail(ass);
@@ -144,95 +147,121 @@ public class SkillTrackerAppMain {
 
 	}
 
-	private static void PrintStatistics() {
+	private static void printStatistics() {
 		int id = 0;
 		List<Associate> associateList = null;
 		List<Skills> skillList = null;
 		Associate associate = null;
 		String searchKey;
-		System.out.println("Chosse the type of statistics");
 		System.out.println("a.Total No of associates");
 		System.out.println("b.Total No of associates who has more than 1 skill");
 		System.out.println("c.List of Associate IDs who has more than N skills");
-		System.out.println("d.Total No of Associates who has given set of skills	");
-		System.out.println("e.Associate wise Skill count");
-		System.out.println("f.BU wise Associate count");
-		System.out.println("g.Skill wise Avg Associate Experience");
-		System.out.println("h.Location wise skill count");
+		System.out.println("d.Total No of Associates who has given set of skills");
+		System.out.println("e.Skill count based on Associates");
+		System.out.println("f.Associate Count based on Business Unit");
+		System.out.println("g.Associate Average experience based on Skills ");
+		System.out.println("h.Skills Count based on Location");
+		System.out.print("Enter an option: ");
 		String option = in.next();
 		switch (option) {
 		case "a":
-			System.out.println("Total assoicates count is :" + service.GetTotalAssociatesCount());
+			System.out.println("Total assoicates count is : " + service.getTotalAssociatesCount());
 			break;
 		case "b":
-			System.out.println(
-					"Total assoicates who has more than 1 skill is :" + service.GetTotalAssociatesWithMoreSkillCount());
+			System.out.println("Total assoicates who has more than 1 skill is : "
+					+ service.getTotalAssociatesWithMoreSkillCount());
 			break;
 		case "c":
-			List<Integer> associates = service.AssociateSkillFilter();
+			List<Integer> associates = service.associateSkillFilter();
 			System.out.println("List of associate id's who has more than 1 skill");
 			associates.forEach(System.out::println);
 			break;
 		case "d":
-			System.out.println("Enter the skill name to find the associates");
-			searchKey=in.next();
-			System.out.println("Total No of associates with given skill"+ service.AssociateSkillCount(searchKey));
+			System.out.println("Enter the skill name to find the associates: ");
+			searchKey = in.next();
+			System.out.println("Total No of associates with given skill: " + service.associateSkillCount(searchKey));
 			break;
 		case "e":
-			Map<String, Map<String, Long>> skillCounts =service.countSkillByCategory();
-			 skillCounts.forEach((associateName, counts) -> {
-		            System.out.println("Associate: " + associateName);
-		            System.out.println("Primary Skills: " + counts.getOrDefault("Primary", 0L));
-		            System.out.println("Secondary Skills: " + counts.getOrDefault("Secondary", 0L));
-		            System.out.println();
-		        });
+			Map<String, Map<String, Long>> skillCounts = service.countSkillByCategory();
+			skillCounts.forEach((associateName, counts) -> {
+				System.out.println("Associate: " + associateName);
+				System.out.println("Primary Skills: " + counts.getOrDefault("Primary", 0L));
+				System.out.println("Secondary Skills: " + counts.getOrDefault("Secondary", 0L));
+				System.out.println();
+			});
 			break;
 		case "f":
-			Map<String,Long> buAssociateCount= service.GetBuWiseCount();
-			 buAssociateCount.forEach((bu, count) -> {
-		            System.out.println("Business Unit: " + bu);
-		            System.out.println("Associate Count: " + count);
-		            System.out.println();
-		        });
+			Map<String, Long> buAssociateCount = service.getBusinessUnitWiseCount();
+			buAssociateCount.forEach((bu, count) -> {
+				System.out.println("Business Unit: " + bu);
+				System.out.println("Associate Count: " + count);
+				System.out.println();
+			});
 			break;
 		case "g":
-			Map<String, Double> skillAvgExperience =service.GetSKillWiseExp();
+			Map<String, Double> skillAvgExperience = service.getSKillWiseAvgExp();
 			skillAvgExperience.forEach((skill, avgExperience) -> {
-	            System.out.println("Skill: " + skill);
-	            System.out.println("Average Experience: " + avgExperience);
-	            System.out.println();
-	        });
+				System.out.println("Skill: " + skill);
+				System.out.println("Average Experience: " + avgExperience);
+				System.out.println();
+				List<Associate> associatesWithSkill = service.viewAllAssociate().stream()
+						.filter(a -> a.getSkills().stream().anyMatch(skillObj -> skillObj.getName().equals(skill)))
+						.collect(Collectors.toList());
+				List<String> skills = new ArrayList<>();
+				associatesWithSkill.forEach(a -> {
+					if (skillList.contains(skill)) {
+						System.out.printf("\n%5s %30s ", associate.getName(), calculateExperience(associate, skill));
+						System.out.println();
+					} else {
+						skills.add(skill);
+						System.out.println("Associates with this skill:");
+						System.out.format("\n%5s %25s", "Associate Name", "Experience");
+						System.out.printf("\n%5s %30s ", associate.getName(), calculateExperience(associate, skill));
+						System.out.println();
+					}
+
+				});
+
+				System.out.println();
+
+			});
 		case "h":
-			Map<String,Long> locationAssociateCount= service.GetBuWiseCount();
-			locationAssociateCount.forEach((bu, count) -> {
-		            System.out.println("Location : " + bu);
-		            System.out.println("Associate Count: " + count);
-		            System.out.println();
-		        });
+			Map<String, Long> locationAssociateCount = service.getLocationWiseCount();
+			locationAssociateCount.forEach((loc, count) -> {
+				System.out.println("Location : " + loc);
+				System.out.println("Associate Count: " + count);
+				System.out.println();
+			});
 			break;
-		default:break;
+		default:
+			break;
 		}
 
 	}
 
-	private static void SearchAssociate() {
+	private static Object calculateAssociateExperience(Associate associate, String skill) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private static void searchAssociate() {
 		int id = 0;
 		List<Associate> associateList = null;
 		List<Skills> skillList = null;
 		Associate associate = null;
 		String searchKey;
-		System.out.println("Chosse the search criteria");
 		System.out.println("a.Search by associte id");
 		System.out.println("b.Search by associte name / location");
-		System.out.println("c.Search by skill name / category");
+		System.out.println("c.Search by skill name");
+		System.out.print("Chosse the search criteria: ");
 		String option = in.next();
 		switch (option) {
 		case "a":
+			System.out.print("Enter associate id: ");
 			id = in.nextInt();
 			try {
-				associate = service.ViewAssociate(id);
+				associate = service.viewAssociate(id);
 			} catch (SkillsException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			printHeader();
@@ -240,17 +269,19 @@ public class SkillTrackerAppMain {
 
 			break;
 		case "b":
+			System.out.print("Enter associate name / location: ");
 			searchKey = in.next();
-			associateList = service.SearchAssociate(searchKey);
+			associateList = service.searchAssociate(searchKey);
 			printHeader();
 			printDetailList(associateList);
 			break;
 		case "c":
-
+			System.out.print("Enter skill: ");
 			searchKey = in.next();
-			skillList = service.GetSkillsBySearch(searchKey);
-			printSkillHeader();
-			printSkillDetail(skillList);
+			associateList = service.searchAssociateBySkill(searchKey);
+			printHeader();
+			printDetailListBasedSkill(associateList, searchKey);
+			break;
 		}
 	}
 
@@ -261,7 +292,7 @@ public class SkillTrackerAppMain {
 		skillList.add(addSkills());
 		associate.setSkills(skillList);
 		associate.setCreatedDate(LocalDateTime.now());
-		boolean added = service.AddAssociate(associate);
+		boolean added = service.addAssociate(associate);
 		if (added) {
 			System.out.println("Associate has been added successfully!");
 		} else {
@@ -307,13 +338,13 @@ public class SkillTrackerAppMain {
 		System.out.print("Enter Skill Name: ");
 		skill.setName(in.next());
 
-		System.out.println("Enter skill Description");
+		System.out.print("Enter skill Description: ");
 		skill.setDescription(in.next());
 
-		System.out.println("Enter skill category");
+		System.out.print("Enter skill category: ");
 		skill.setCategory(in.next());
 
-		System.out.println("Enter skill Experience in months");
+		System.out.print("Enter skill Experience in months: ");
 		skill.setExperience(in.nextInt());
 		return skill;
 	}
@@ -357,6 +388,25 @@ public class SkillTrackerAppMain {
 		}
 	}
 
+	private static void printDetailListBasedSkill(List<Associate> assc, String name) {
+		if (assc == null) {
+			return;
+		}
+		for (Associate ass : assc) {
+			if (ass.getSkills() != null && ass.getSkills().size() > 0) {
+				for (Skills s1 : ass.getSkills()) {
+					if (s1.getName().equals(name)) {
+						System.out.printf("\n%15s %15s %15s %15s %15s %15s  %15s", ass.getId(), ass.getName(),
+								ass.getAge(), ass.getBu(), s1.getName(), s1.getCategory(), s1.getExperience());
+					}
+				}
+			} else {
+				System.out.printf("\n%15s %15s %15s %15s %15s %15s  %15s", ass.getId(), ass.getName(), ass.getAge(),
+						ass.getBu(), null, null, null);
+			}
+		}
+	}
+
 	private static void printSkillHeader() {
 		System.out.format("\n%15s %15s %15s  %15s  %15s ", "SkillId", "Skill Name", "Skill Description",
 				"Skill Category", "Experience");
@@ -369,5 +419,13 @@ public class SkillTrackerAppMain {
 					s1.getCategory(), s1.getExperience());
 
 		}
+	}
+
+	private static int calculateExperience(Associate associate, String skill) {
+
+		return associate.getSkills().stream().filter(skillObj -> skillObj.getName().equals(skill))
+
+				.mapToInt(Skills::getExperience).sum();
+
 	}
 }

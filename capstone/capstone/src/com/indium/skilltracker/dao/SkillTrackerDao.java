@@ -8,10 +8,9 @@ import com.indium.skilltrackerapp.model.Skills;
 public interface SkillTrackerDao {
 	public boolean createAssociate(Associate associate);
 
-
 	public boolean updateAssociate(Associate associate);
 
-	public boolean updateSkill(Skills skills,int skillId);
+	public boolean updateSkill(Skills skills, int skillId);
 
 	public boolean deleteAssociate(int id);
 
@@ -28,6 +27,8 @@ public interface SkillTrackerDao {
 	public int getTotalAssociates();
 
 	public List<Associate> searchAssociatesByNameOrLocation(String name);
+
+	public List<Associate> searchAssociatesBySkillName(String name);
 
 	List<Skills> getAllSkill();
 

@@ -125,8 +125,8 @@ public class SkillTrackerDaoJdbcImpl implements SkillTrackerDao {
 			String query = "Update associates set name = \"" + associate.getName() + "\",age=" + associate.getAge()
 					+ ",location =\"" + associate.getLocation() + "\",businessUnit=\"" + associate.getBu()
 					+ "\",email=\"" + associate.getEmail() + "\" where id=" + associate.getId();
-
-			status = stmt.execute(query);
+			stmt.execute(query);
+			status = true;
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -336,6 +336,21 @@ public class SkillTrackerDaoJdbcImpl implements SkillTrackerDao {
 			e.printStackTrace();
 		}
 		return associateList;
+	}
+
+	@Override
+	public List<Associate> searchAssociatesBySkillName(String name) {
+		List<Associate> associates = new ArrayList();
+		for (Associate associate : getAllAssociate()) {
+			for (Skills skill : associate.getSkills()) {
+				if (skill.getName().toLowerCase().equals(name.toLowerCase())) {
+					associates.add(associate);
+					break;
+				}
+			}
+		}
+
+		return associates;
 	}
 
 }
