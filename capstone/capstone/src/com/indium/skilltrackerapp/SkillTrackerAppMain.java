@@ -209,14 +209,14 @@ public class SkillTrackerAppMain {
 						.collect(Collectors.toList());
 				List<String> skills = new ArrayList<>();
 				associatesWithSkill.forEach(a -> {
-					if (skillList.contains(skill)) {
-						System.out.printf("\n%5s %30s ", associate.getName(), calculateExperience(associate, skill));
+					if (skills.contains(skill)) {
+						System.out.printf("\n%5s %30s ", a.getName(), calculateExperience(a, skill));
 						System.out.println();
 					} else {
 						skills.add(skill);
 						System.out.println("Associates with this skill:");
 						System.out.format("\n%5s %25s", "Associate Name", "Experience");
-						System.out.printf("\n%5s %30s ", associate.getName(), calculateExperience(associate, skill));
+						System.out.printf("\n%5s %30s ", a.getName(), calculateExperience(a, skill));
 						System.out.println();
 					}
 
@@ -225,6 +225,7 @@ public class SkillTrackerAppMain {
 				System.out.println();
 
 			});
+			break;
 		case "h":
 			Map<String, Long> locationAssociateCount = service.getLocationWiseCount();
 			locationAssociateCount.forEach((loc, count) -> {
